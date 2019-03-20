@@ -148,10 +148,10 @@ int SvtxEvaluator::Init(PHCompositeNode* topNode)
                                                    "nhittpcall:nhittpcin:nhittpcmid:nhittpcout:nclusall:nclustpc:nclusintt:nclusmaps");
 
   if (_do_gtrack_eval) _ntp_gtrack = new TNtuple("ntp_gtrack", "g4particle => best svtxtrack",
-                                                 "event:gntracks:gtrackID:gflavor:gnhits:gnmaps:gnintt:"
+                                                 "event:gntracks:gtrackID:gflavor:gnhits:gnmaps:gnmap0:gnmap1:gnmap2:gnintt:"
                                                  "gnintt1:gnintt2:gnintt3:gnintt4:"
                                                  "gnintt5:gnintt6:gnintt7:gnintt8:"
-                                                 "gntpc:gnlmaps:gnlintt:gnltpc:"
+                                                 "gntpc:lmap0:lmap1:lmap2:gnlmaps:gnlintt:gnltpc:"
                                                  "gpx:gpy:gpz:gpt:geta:gphi:"
                                                  "gvx:gvy:gvz:gvt:"
                                                  "gfpx:gfpy:gfpz:gfx:gfy:gfz:"
@@ -2191,6 +2191,9 @@ void SvtxEvaluator::fillOutputNtuples(PHCompositeNode* topNode)
 
         float ng4hits = g4clusters.size();
         unsigned int ngmaps = 0;
+        unsigned int ngmap0 = 0;
+        unsigned int ngmap1 = 0;
+        unsigned int ngmap2 = 0;
         unsigned int ngintt = 0;
         unsigned int ngintt1 = 0;
         unsigned int ngintt2 = 0;
@@ -2223,6 +2226,12 @@ void SvtxEvaluator::fillOutputNtuples(PHCompositeNode* topNode)
           //cout<<__LINE__<<": " << _ievent <<": " <<gtrackID << ": " << layer <<": " <<g4cluster->get_id() <<endl;
           if (_nlayers_maps > 0 && layer < _nlayers_maps)
           {
+            if (layer == 0U)
+              ngmap0++;
+            else if (layer == 1U)
+              ngmap1++;
+            else if (layer == 2U)
+              ngmap2++;
             lmaps[layer] = 1;
             ngmaps++;
           }
@@ -2495,6 +2504,9 @@ void SvtxEvaluator::fillOutputNtuples(PHCompositeNode* topNode)
                                gflavor,
                                ng4hits,
                                (float) ngmaps,
+                               (float) ngmap0,
+                               (float) ngmap1,
+                               (float) ngmap2,
                                (float) ngintt,
                                (float) ngintt1,
                                (float) ngintt2,
@@ -2505,6 +2517,9 @@ void SvtxEvaluator::fillOutputNtuples(PHCompositeNode* topNode)
                                (float) ngintt7,
                                (float) ngintt8,
                                (float) ngtpc,
+                               (float) lmaps[0],
+                               (float) lmaps[1],
+                               (float) lmaps[2],
                                (float) nglmaps,
                                (float) nglintt,
                                (float) ngltpc,
