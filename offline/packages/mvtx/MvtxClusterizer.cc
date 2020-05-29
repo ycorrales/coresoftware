@@ -323,10 +323,11 @@ void MvtxClusterizer::ClusterMvtx(PHCompositeNode *topNode)
 	    //cout << "   new mvtx clusterizer: cluster key " << ckey << " layer " << layer << " chip " << chip << " stave " << stave
 	    //	 << " row " << row << " col " << col << " pixnum " << pixnum << endl;;
 
-	    //TVector3 local_coords = layergeom->get_local_coords_from_pixel(pixnum);
+	    TVector3 local_coords = layergeom->get_local_coords_from_pixel(row,col);
+      local_coords.SetY(0.0f); // force hit position to center of sensor
 	    TVector3 world_coords = layergeom->get_world_from_local_coords(stave,
                                                                      chip,
-                                                                     layergeom->get_local_coords_from_pixel(row,col)
+                                                                     local_coords
                                                                     );
 	    //cout << "   new: world coords: X " << world_coords.X() << " Y " << world_coords.Y() << " Z " << world_coords.Z() << endl;
 
